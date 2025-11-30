@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Checkout</title>
+<style>
+body { font-family: Arial, sans-serif; background: #c8fdff; margin: 0; padding: 0; transition:0.3s; }
+header { background: #0059ff; color: white; padding: 15px; text-align: center; font-size: 28px; position: relative; }
+.checkout-container { max-width: 900px; margin: 40px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+input, select { width: 100%; padding: 12px; font-size: 18px; border: 2px solid #0059ff; border-radius: 6px; margin: 10px 0; }
+.place-btn { background: #01cca0; color: white; padding: 15px; border: none; width: 100%; border-radius: 8px; font-size: 20px; cursor: pointer; }
+.place-btn:hover { background: #006650; }
+.cart-item { background: #f5faff; padding: 12px; border-radius: 8px; margin: 12px 0; border-left: 6px solid #0059ff; }
+.total-box { margin-top: 20px; background: #e7fbff; padding: 15px; font-size: 22px; border-radius: 8px; }
+body.dark-mode { background-color: #121212; color: #e0e0e0; }
+header.dark-mode { background: #1a1a1a; color: #e0e0e0; }
+.Fashion.dark-mode, .product-container.dark-mode, .related-item.dark-mode { background-color: #1e1e1e; box-shadow: 0 4px 10px rgba(255,255,255,0.05); color: #e0e0e0; }
+.category-btn.dark-mode, .explore-btn.dark-mode, #loadMoreBtn.dark-mode, .about-btn.dark-mode, .login-btn.dark-mode, .add-btn.dark-mode { background-color: #333; color: #fff; }
+.search-container input.dark-mode { background-color: #222; color: #fff; border-color: #555; }
+.search-container button.dark-mode { background-color: #01cca0; color: #fff; }
+</style>
+</head>
+
+<body>
+<header>
+    Checkout
+    <button id="darkModeToggle" style="position:absolute; top:15px; right:60px; padding:8px 15px; border:none; border-radius:6px; cursor:pointer; background:#fff; color:#0059ff;">🌙</button>
+</header>
+
+<div class="checkout-container">
+    <h2 style="color:#0059ff;">Shipping Information</h2>
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="text" id="address" placeholder="Full Address">
+    <input type="text" id="phone" placeholder="Phone Number">
+
+    <h2 style="color:#0059ff; margin-top:30px;">Order Summary</h2>
+    <div id="summaryBox"></div>
+
+    <div class="total-box">
+        Total Amount: ₹ <span id="totalAmount">0</span>
+    </div>
+
+    <button class="place-btn" onclick="placeOrder()">Place Order</button>
+</div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let total = 0;
+
+cart.forEach(item => {
+    total += item.quantity * (item.price || 999);
+    document.getElementById("summaryBox").innerHTML += `
+        <div class="cart-item">
+            <strong>${item.name}</strong><br>
+            Qty: ${item.quantity}<br>
+            Price: ₹${item.price || 999}
+        </div>
+    `;
+});
+
+document.getElementById("totalAmount").textContent = total;
+
+function placeOrder() {
+    if (!document.getElementById("name").value ||
+        !document.getElementById("address").value ||
+        !document.getElementById("phone").value) {
+        alert("Please fill all shipping details");
+        return;
+    }
+    localStorage.removeItem("cart");
+    alert("Order placed successfully!");
+    window.location.href = "index.html";
+}
+</script>
+
+<script>
+const darkModeToggle = document.getElementById('darkModeToggle');
+const body = document.body;
+
+function applyDarkMode(isDark){
+    if(isDark){
+        body.classList.add('dark-mode');
+        document.querySelectorAll('header, .Fashion, .product-container, .related-item, .category-btn, .explore-btn, #loadMoreBtn, .about-btn, .login-btn, .add-btn, .search-container input, .search-container button').forEach(el => el.classList.add('dark-mode'));
+        darkModeToggle.textContent = "☀️";
+    } else {
+        body.classList.remove('dark-mode');
+        document.querySelectorAll('header, .Fashion, .product-container, .related-item, .category-btn, .explore-btn, #loadMoreBtn, .about-btn, .login-btn, .add-btn, .search-container input, .search-container button').forEach(el => el.classList.remove('dark-mode'));
+        darkModeToggle.textContent = "🌙";
+    }
+}
+
+let darkMode = localStorage.getItem('darkMode') === 'true';
+applyDarkMode(darkMode);
+
+darkModeToggle.addEventListener('click', () => {
+    darkMode = !darkMode;
+    localStorage.setItem('darkMode', darkMode);
+    applyDarkMode(darkMode);
+});
+</script>
+
+</body>
+</html>

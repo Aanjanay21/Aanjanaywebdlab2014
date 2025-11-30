@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shopping Cart - E-commerce</title>
+<style>
+body { font-family: Arial, sans-serif; background-color: #c8fdff; padding:0; margin:0; transition:0.3s; }
+header { background: #0059ff; color: white; padding: 15px; text-align: center; font-size: 28px; position: relative; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+.back-btn { position: absolute; left:20px; top:15px; background:white; color:#0059ff; border:none; padding:8px 15px; font-size:16px; cursor:pointer; border-radius:6px; transition:0.3s; }
+.back-btn:hover { background: #d9e9ff; }
+.cart-container { max-width:900px; margin:30px auto; background:white; padding:25px; border-radius:12px; box-shadow:2px 2px 12px rgba(0,0,0,0.15); animation:fadeIn 0.5s ease; }
+@keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
+.cart-item { display:flex; align-items:center; gap:20px; border-bottom:1px solid #ddd; padding:15px 0; }
+.cart-item img { width:120px; height:120px; border-radius:10px; object-fit:cover; }
+.cart-item-details { flex-grow:1; }
+.cart-item-details h3 { margin:0; font-size:20px; color:#0059ff; }
+.cart-item-details p { margin:6px 0; color:#555; }
+.quantity-box { display:flex; align-items:center; gap:12px; }
+.qty-btn { background:#0059ff; color:white; border:none; width:30px; height:30px; border-radius:5px; cursor:pointer; font-size:20px; }
+.qty-number { font-size:18px; width:32px; text-align:center; font-weight:bold; }
+.remove-btn { background:#01cca0; color:white; border:none; padding:8px 15px; cursor:pointer; border-radius:6px; font-size:15px; transition:0.3s; }
+.remove-btn:hover { background:#009f7f; }
+.total-box { margin-top:25px; padding-top:15px; border-top:2px solid #0059ff; font-size:18px; line-height:1.8; }
+.total-box strong { font-size:22px; color:#0059ff; }
+.checkout-btn, .clear-btn { width:100%; margin-top:20px; padding:12px; font-size:18px; border:none; border-radius:8px; cursor:pointer; transition:0.3s; font-weight:bold; }
+.checkout-btn { background:#0059ff; color:white; }
+.checkout-btn:hover { background:#003cad; }
+.clear-btn { background:#ff4444; color:white; }
+.clear-btn:hover { background:#b30000; }
+.empty-msg { text-align:center; font-size:22px; color:#555; margin:50px 0; }
+.empty-cart-img { display:block; margin:0 auto; width:160px; opacity:0.8; }
+@media(max-width:600px) { .cart-item { flex-direction:column; text-align:center; } .quantity-box { justify-content:center; } .remove-btn { margin-top:10px; } }
+body.dark-mode { background-color:#121212; color:#e0e0e0; }
+header.dark-mode { background:#1a1a1a; color:#e0e0e0; }
+.Fashion.dark-mode, .product-container.dark-mode, .related-item.dark-mode { background-color:#1e1e1e; box-shadow:0 4px 10px rgba(255,255,255,0.05); color:#e0e0e0; }
+.category-btn.dark-mode, .explore-btn.dark-mode, #loadMoreBtn.dark-mode, .about-btn.dark-mode, .login-btn.dark-mode, .add-btn.dark-mode { background-color:#333; color:#fff; }
+.search-container input.dark-mode { background-color:#222; color:#fff; border-color:#555; }
+.search-container button.dark-mode { background-color:#01cca0; color:#fff; }
+</style>
+</head>
+<body>
+<header>
+<button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
+<button id="darkModeToggle" style="position:absolute; top:15px; right:60px; padding:8px 15px; border:none; border-radius:6px; cursor:pointer; background:#fff; color:#0059ff;">🌙</button>
+Your Cart
+</header>
+<div class="cart-container" id="cartContainer"></div>
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const cartContainer = document.getElementById("cartContainer");
+
+function renderCart() {
+cartContainer.innerHTML = "";
+if(cart.length===0){
+cartContainer.innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/102/102661.png" class="empty-cart-img"/><p class="empty-msg">Your cart is empty.</p>`;
+return;
+}
+let subtotal=0;
+cart.forEach((item,index)=>{
+const qty = item.quantity || 1;
+const price = item.price || 999;
+subtotal += price*qty;
+const cartItem = document.createElement("div");
+cartItem.className="cart-item";
+cartItem.innerHTML=`
+<img src="${item.img}" alt="${item.name}"/>
+<div class="cart-item-details">
+<h3>${item.name}</h3>
+<p>${item.desc}</p>
+<p><strong>Price: ₹${price}</strong></p>
+<div class="quantity-box">
+<button class="qty-btn" onclick="changeQty(${index},-1)">−</button>
+<span class="qty-number">${qty}</span>
+<button class="qty-btn" onclick="changeQty(${index},1)">+</button>
+</div>
+</div>
+<button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+`;
+cartContainer.appendChild(cartItem);
+});
+const tax=subtotal*0.07;
+const total=subtotal+tax;
+cartContainer.innerHTML+=`
+<div class="total-box">
+Subtotal: ₹${subtotal.toFixed(2)} <br>
+Tax (7%): ₹${tax.toFixed(2)} <br>
+<strong>Total: ₹${total.toFixed(2)}</strong>
+</div>
+<button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+<button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+`;
+}
+
+function removeItem(index){ cart.splice(index,1); localStorage.setItem("cart",JSON.stringify(cart)); renderCart(); }
+function changeQty(index,delta){ cart[index].quantity+=delta; if(cart[index].quantity<1) cart[index].quantity=1; localStorage.setItem("cart",JSON.stringify(cart)); renderCart(); }
+function clearCart(){ cart=[]; localStorage.setItem("cart",JSON.stringify(cart)); renderCart(); }
+function checkout(){ alert("Checkout page not implemented."); }
+
+renderCart();
+</script>
+<script>
+const darkModeToggle = document.getElementById('darkModeToggle');
+const body = document.body;
+function applyDarkMode(isDark){
+if(isDark){
+body.classList.add('dark-mode');
+document.querySelectorAll('header, .Fashion, .product-container, .related-item, .category-btn, .explore-btn, #loadMoreBtn, .about-btn, .login-btn, .add-btn, .search-container input, .search-container button').forEach(el=>el.classList.add('dark-mode'));
+darkModeToggle.textContent="☀️";
+}else{
+body.classList.remove('dark-mode');
+document.querySelectorAll('header, .Fashion, .product-container, .related-item, .category-btn, .explore-btn, #loadMoreBtn, .about-btn, .login-btn, .add-btn, .search-container input, .search-container button').forEach(el=>el.classList.remove('dark-mode'));
+darkModeToggle.textContent="🌙";
+}
+}
+let darkMode = localStorage.getItem('darkMode')==='true';
+applyDarkMode(darkMode);
+darkModeToggle.addEventListener('click',()=>{
+darkMode = !darkMode;
+localStorage.setItem('darkMode',darkMode);
+applyDarkMode(darkMode);
+});
+</script>
+</body>
+</html>

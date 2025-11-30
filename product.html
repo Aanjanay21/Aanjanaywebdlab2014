@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Product Details</title>
+<style>
+body { font-family: Arial, sans-serif; background:#e9faff; margin:0; padding:0; }
+header { background:#0059ff; color:#fff; padding:15px; text-align:center; font-size:28px; position:sticky; top:0; }
+.cart { position:absolute; right:20px; top:15px; font-size:26px; color:white; }
+.cart-count { background:white; color:#0059ff; padding:2px 8px; border-radius:50%; font-size:14px; font-weight:bold; position:absolute; top:-10px; right:-12px; display:none; }
+.product-container { max-width:900px; margin:40px auto; background:white; border-radius:12px; padding:25px; display:flex; gap:30px; box-shadow:0 4px 10px rgba(0,0,0,0.1); flex-wrap:wrap; }
+.product-container img { width:300px; height:300px; border-radius:12px; object-fit:cover; }
+.details h1 { font-size:32px; color:#0059ff; }
+.price { font-size:28px; color:#01cca0; margin:10px 0; }
+.rating { font-size:22px; color:gold; }
+.add-btn { background:#01cca0; color:white; padding:12px 25px; border:none; border-radius:6px; margin-top:15px; cursor:pointer; font-size:18px; }
+.add-btn:hover { background:#006650; }
+.related-container { max-width:900px; margin:40px auto; }
+.related-item { background:white; padding:15px; border-radius:10px; display:flex; gap:20px; margin:20px 0; box-shadow:2px 2px 10px rgba(0,0,0,0.1); }
+.related-item img { width:120px; height:120px; border-radius:8px; object-fit:cover; }
+.related-item button { background:#01cca0; color:white; padding:8px 20px; border:none; border-radius:6px; cursor:pointer; }
+body.dark-mode { background-color: #121212; color: #e0e0e0; }
+header.dark-mode { background: #1a1a1a; color: #e0e0e0; }
+.Fashion.dark-mode, .product-container.dark-mode, .related-item.dark-mode { background-color: #1e1e1e; box-shadow: 0 4px 10px rgba(255,255,255,0.05); color: #e0e0e0; }
+.category-btn.dark-mode, .explore-btn.dark-mode, #loadMoreBtn.dark-mode, .about-btn.dark-mode, .login-btn.dark-mode, .add-btn.dark-mode { background-color: #333; color: #fff; }
+.search-container input.dark-mode { background-color: #222; color: #fff; border-color: #555; }
+.search-container button.dark-mode { background-color: #01cca0; color: #fff; }
+</style>
+</head>
+<body>
+
+<header>
+<button id="darkModeToggle" style="position:absolute; top:15px; right:60px; padding:8px 15px; border:none; border-radius:6px; cursor:pointer; background:#fff; color:#0059ff;">🌙</button>
+    Product Details
+    <a href="cart.html" class="cart">🛒<span class="cart-count" id="cartCount"></span></a>
+</header>
+
+<div class="product-container" id="productBox"></div>
+
+<h2 style="text-align:center; color:#0059ff;">Related Products</h2>
+<div class="related-container" id="relatedBox"></div>
+
+<script>
+const products = {
+    "Classic T-Shirt": { name:"Classic T-Shirt", price:799, desc:"Comfortable cotton t-shirt.", image:"Image/tshirt.jpg", rating:"⭐⭐⭐⭐☆" },
+    "Formal Shirt": { name:"Formal Shirt", price:999, desc:"Elegant office wear.", image:"Image/shirt.jpg", rating:"⭐⭐⭐⭐⭐" },
+    "Denim Jeans": { name:"Denim Jeans", price:1199, desc:"Stylish and durable jeans.", image:"Image/jeans.jpg", rating:"⭐⭐⭐⭐☆" },
+    "Mini Skirt": { name:"Mini Skirt", price:899, desc:"Trendy casual skirt.", image:"Image/skirt.jpg", rating:"⭐⭐⭐⭐☆" },
+    "Sneakers": { name:"Sneakers", price:1299, desc:"Comfortable for daily wear.", image:"Image/sneakers.jpg", rating:"⭐⭐⭐⭐☆" },
+    "Leather Boots": { name:"Leather Boots", price:1499, desc:"Durable and stylish boots.", image:"Image/boots.jpg", rating:"⭐⭐⭐⭐⭐" },
+    "Wrist Watch": { name:"Wrist Watch", price:1999, desc:"Elegant accessory for all outfits.", image:"Image/watch.jpg", rating:"⭐⭐⭐⭐⭐" },
+    "Sun Hat": { name:"Sun Hat", price:499, desc:"Stylish protection from sun.", image:"Image/hat.jpg", rating:"⭐⭐⭐⭐☆" }
+};
+
+let params = new URLSearchParams(window.location.search);
+let productName = params.get("item")?.toLowerCase() || "classic t-shirt"; // default product
+let product = Object.values(products).find(p => p.name.toLowerCase() === productName);
+
+document.getElementById("productBox").innerHTML = `
+    <img src="${product.image}">
+    <div class="details">
+        <h1>${product.name}</h1>
+        <div class="rating">${product.rating}</div>
+        <div class="price">₹${product.price}</div>
+        <p>${product.desc}</p>
+        <button class="add-btn" onclick="addToCart()">Add to Cart</button>
+    </div>
+`;
+
+function addToCart(){
+    const productData = { name:product.name, img:product.image, price:product.price, quantity:1 };
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let index = cart.findIndex(p=>p.name===product.name);
+    if(index>=0) cart[index].quantity++;
+    else cart.push(productData);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartCount();
+    alert("Added to cart!");
+}
+
+function updateCartCount(){
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let count = cart.reduce((t,i)=>t+i.quantity,0);
+    const c=document.getElementById("cartCount");
+    c.textContent = count;
+    c.style.display = count>0 ? "inline-block":"none";
+}
+
+updateCartCount();
+
+for(let key in products){
+    if(key.toLowerCase() !== productName){
+        const p = products[key];
+        document.getElementById("relatedBox").innerHTML += `
+        <div class="related-item">
+            <img src="${p.image}">
+            <div>
+                <h3>${p.name}</h3>
+                <p>${p.desc}</p>
+                <button onclick="location.href='product.html?item=${encodeURIComponent(p.name)}'">View</button>
+            </div>
+        </div>`;
+    }
+}
+</script>
+
+<script>
+const darkModeToggle = document.getElementById('darkModeToggle');
+const body = document.body;
+
+function applyDarkMode(isDark){
+    if(isDark){
+        body.classList.add('dark-mode');
+        document.querySelectorAll('header, .product-container, .related-item, .add-btn').forEach(el => {
+            el.classList.add('dark-mode');
+        });
+        darkModeToggle.textContent = "☀️";
+    } else {
+        body.classList.remove('dark-mode');
+        document.querySelectorAll('header, .product-container, .related-item, .add-btn').forEach(el => {
+            el.classList.remove('dark-mode');
+        });
+        darkModeToggle.textContent = "🌙";
+    }
+}
+
+let darkMode = localStorage.getItem('darkMode') === 'true';
+applyDarkMode(darkMode);
+
+darkModeToggle.addEventListener('click', () => {
+    darkMode = !darkMode;
+    localStorage.setItem('darkMode', darkMode);
+    applyDarkMode(darkMode);
+});
+</script>
+
+</body>
+</html>

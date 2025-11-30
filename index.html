@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>E-commerce Website</title>
+<style>
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #e0f7fa; margin:0; padding:0; }
+a { text-decoration:none; }
+header { background: linear-gradient(90deg,#0059ff,#01cca0); color:white; padding:15px 20px; font-size:28px; position:sticky; top:0; display:flex; justify-content:center; z-index:100; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
+header .title { font-family:'Courier New', monospace; font-size:28px; }
+.buttons-container { display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin:10px auto; max-width:700px; }
+.login-btn { background:#fff; color:#0059ff; padding:10px 25px; border-radius:25px; font-size:16px; font-weight:bold; box-shadow:0 4px 6px rgba(0,0,0,0.15); transition:0.3s; }
+.login-btn:hover { background:#01cca0; color:white; }
+.cart { position:absolute; right:20px; top:15px; font-size:26px; color:white; cursor:pointer; }
+.cart-count { background:#ff5252; color:white; border-radius:50%; padding:2px 8px; font-size:14px; font-weight:bold; position:absolute; top:-10px; right:-12px; display:none; box-shadow:0 2px 4px rgba(0,0,0,0.2); }
+.categories { max-width:950px; margin:20px auto; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.category-btn { background:#0059ff; color:white; border:none; padding:10px 20px; border-radius:30px; cursor:pointer; font-size:16px; font-weight:bold; transition:0.3s; box-shadow:0 4px 6px rgba(0,0,0,0.1); }
+.category-btn:hover { background:#01cca0; }
+.search-container { margin:15px auto; max-width:600px; display:flex; gap:10px; }
+.search-container input { flex:1; padding:12px; border:2px solid #0059ff; font-size:16px; border-radius:30px; outline:none; }
+.search-container button { background:#01cca0; color:white; padding:12px 20px; font-size:16px; border-radius:30px; border:none; cursor:pointer; font-weight:bold; }
+.search-container button:hover { background:#006650; }
+.fashion-container { max-width:950px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; }
+.Fashion { background:white; border-radius:20px; padding:15px; display:flex; flex-direction:column; align-items:center; gap:10px; box-shadow:0 6px 15px rgba(0,0,0,0.15); transition:0.4s; }
+.Fashion:hover { transform:translateY(-5px) scale(1.03); box-shadow:0 12px 25px rgba(0,0,0,0.25); }
+.Fashion img { width:100%; max-width:180px; height:180px; border-radius:15px; object-fit:cover; }
+.Fashion-content h3 { font-size:20px; color:#0059ff; text-align:center; margin:0; }
+.Fashion-content p { font-size:14px; text-align:center; color:#555; font-style:italic; }
+.explore-btn { background:#0059ff; color:white; padding:8px 18px; border-radius:25px; border:none; cursor:pointer; font-weight:bold; transition:0.3s; }
+.explore-btn:hover { background:#01cca0; transform:scale(1.05); }
+#loadMoreBtn { background-color:#01cca0; color:white; padding:12px 35px; font-size:18px; border-radius:30px; border:none; display:block; margin:20px auto 50px auto; cursor:pointer; font-weight:bold; transition:0.3s; }
+#loadMoreBtn:hover { background-color:#006650; transform:scale(1.05); }
+.about-footer { display:flex; justify-content:center; margin-bottom:30px; }
+.about-footer a { background:#0059ff; color:white; padding:12px 30px; border-radius:25px; font-size:16px; font-weight:bold; transition:0.3s; }
+body.dark-mode { background-color:#121212; color:#e0e0e0; }
+header.dark-mode { background:#1a1a1a; color:#e0e0e0; }
+.Fashion.dark-mode, .product-container.dark-mode, .related-item.dark-mode { background-color:#1e1e1e; box-shadow:0 4px 10px rgba(255,255,255,0.05); color:#e0e0e0; }
+.category-btn.dark-mode, .explore-btn.dark-mode, #loadMoreBtn.dark-mode, .about-btn.dark-mode, .login-btn.dark-mode, .add-btn.dark-mode { background-color:#333; color:#fff; }
+.search-container input.dark-mode { background-color:#222; color:#fff; border-color:#555; }
+.search-container button.dark-mode { background-color:#01cca0; color:#fff; }
+.about-footer a:hover { background:#01cca0; }
+</style>
+</head>
+<body>
+<header>
+<button id="darkModeToggle" style="position:absolute; top:15px; right:60px; padding:8px 15px; border:none; border-radius:6px; cursor:pointer; background:#fff; color:#0059ff;">🌙</button>
+<span class="title">E-commerce</span>
+<div class="buttons-container">
+<a href="login.html" class="login-btn">Login / Sign Up</a>
+</div>
+<a href="cart.html" class="cart">🛒<span class="cart-count" id="cartCount">0</span></a>
+</header>
+<div class="categories">
+<button class="category-btn" data-category="All">All</button>
+<button class="category-btn" data-category="Tops">Tops</button>
+<button class="category-btn" data-category="Bottoms">Bottoms</button>
+<button class="category-btn" data-category="Footwear">Footwear</button>
+<button class="category-btn" data-category="Accessories">Accessories</button>
+</div>
+<div class="search-container">
+<input type="text" id="searchBar" placeholder="Search products or categories...">
+<button onclick="searchProducts()">Search</button>
+</div>
+<div class="fashion-container" id="fashionContainer">
+<div class="Fashion" data-category="Tops">
+<img src="Image/tshirt.jpg" alt="Classic T-Shirt">
+<div class="Fashion-content">
+<h3>Classic T-Shirt</h3>
+<p>Comfortable cotton t-shirt.</p>
+<button class="explore-btn" onclick="viewProduct('Classic T-Shirt','Image/tshirt.jpg','Comfortable cotton t-shirt',499)">View Product</button>
+</div>
+</div>
+<div class="Fashion" data-category="Tops">
+<img src="Image/shirt.jpg" alt="Formal Shirt">
+<div class="Fashion-content">
+<h3>Formal Shirt</h3>
+<p>Elegant office wear.</p>
+<button class="explore-btn" onclick="viewProduct('Formal Shirt','Image/shirt.jpg','Elegant office wear',799)">View Product</button>
+</div>
+</div>
+<div class="Fashion" data-category="Bottoms">
+<img src="Image/jeans.jpg" alt="Denim Jeans">
+<div class="Fashion-content">
+<h3>Denim Jeans</h3>
+<p>Stylish and durable jeans.</p>
+<button class="explore-btn" onclick="viewProduct('Denim Jeans','Image/jeans.jpg','Stylish and durable jeans',1299)">View Product</button>
+</div>
+</div>
+<div class="Fashion" data-category="Bottoms">
+<img src="Image/skirt.jpg" alt="Mini Skirt">
+<div class="Fashion-content">
+<h3>Mini Skirt</h3>
+<p>Trendy casual skirt.</p>
+<button class="explore-btn" onclick="viewProduct('Mini Skirt','Image/skirt.jpg','Trendy casual skirt',599)">View Product</button>
+</div>
+</div>
+<div class="Fashion" data-category="Footwear">
+<img src="Image/sneakers.jpg" alt="Sneakers">
+<div class="Fashion-content">
+<h3>Sneakers</h3>
+<p>Comfortable for daily wear.</p>
+<button class="explore-btn" onclick="viewProduct('Sneakers','Image/sneakers.jpg','Comfortable for daily wear',1499)">View Product</button>
+</div>
+</div>
+<div class="Fashion" data-category="Footwear">
+<img src="Image/boots.jpg" alt="Leather Boots">
+<div class="Fashion-content">
+<h3>Leather Boots</h3>
+<p>Durable and stylish boots.</p>
+<button class="explore-btn" onclick="viewProduct('Leather Boots','Image/boots.jpg','Durable and stylish boots',1999)">View Product</button>
+</div>
+</div>
+<div class="Fashion" data-category="Accessories">
+<img src="Image/watch.jpg" alt="Wrist Watch">
+<div class="Fashion-content">
+<h3>Wrist Watch</h3>
+<p>Elegant accessory for all outfits.</p>
+<button class="explore-btn" onclick="viewProduct('Wrist Watch','Image/watch.jpg','Elegant accessory for all outfits',2499)">View Product</button>
+</div>
+</div>
+<div class="Fashion" data-category="Accessories">
+<img src="Image/hat.jpg" alt="Sun Hat">
+<div class="Fashion-content">
+<h3>Sun Hat</h3>
+<p>Stylish protection from sun.</p>
+<button class="explore-btn" onclick="viewProduct('Sun Hat','Image/hat.jpg','Stylish protection from sun',399)">View Product</button>
+</div>
+</div>
+</div>
+<button id="loadMoreBtn">Load More</button>
+<div class="about-footer">
+<a href="about.html">About Us</a>
+</div>
+<script>
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+const fashionItems = document.querySelectorAll('.Fashion');
+let visibleItems = 4;
+function updateVisibility(){ fashionItems.forEach((item,i)=>{ item.style.display = i<visibleItems?'flex':'none'; }); if(visibleItems>=fashionItems.length) loadMoreBtn.style.display='none'; }
+loadMoreBtn.addEventListener('click',()=>{ visibleItems+=2; updateVisibility(); });
+updateVisibility();
+const cartCount=document.getElementById('cartCount');
+window.addEventListener('load',()=>{ let cart=JSON.parse(localStorage.getItem('cart'))||[]; let count=cart.reduce((t,item)=>t+item.quantity,0); if(count>0){ cartCount.style.display="inline-block"; cartCount.textContent=count; } });
+function searchProducts(){ const searchText=document.getElementById("searchBar").value.toLowerCase(); fashionItems.forEach(item=>{ const name=item.querySelector("h3").textContent.toLowerCase(); const category=item.getAttribute('data-category').toLowerCase(); item.style.display=(name.includes(searchText)||category.includes(searchText))?'flex':'none'; }); }
+document.querySelectorAll('.category-btn').forEach(btn=>{ btn.addEventListener('click',()=>{ const category=btn.getAttribute('data-category'); fashionItems.forEach(item=>{ item.style.display=(category==="All"||item.getAttribute('data-category')===category)?'flex':'none'; }); visibleItems=fashionItems.length; if(visibleItems>=fashionItems.length) loadMoreBtn.style.display='none'; }); });
+function viewProduct(name,img,desc,price){ localStorage.setItem('product',JSON.stringify({name,img,desc,price})); window.location.href='product.html'; }
+</script>
+<script>
+const darkModeToggle=document.getElementById('darkModeToggle');
+const body=document.body;
+function applyDarkMode(isDark){ if(isDark){ body.classList.add('dark-mode'); document.querySelectorAll('header,.Fashion,.product-container,.related-item,.category-btn,.explore-btn,#loadMoreBtn,.about-btn,.login-btn,.add-btn,.search-container input,.search-container button').forEach(el=>el.classList.add('dark-mode')); darkModeToggle.textContent="☀️"; } else{ body.classList.remove('dark-mode'); document.querySelectorAll('header,.Fashion,.product-container,.related-item,.category-btn,.explore-btn,#loadMoreBtn,.about-btn,.login-btn,.add-btn,.search-container input,.search-container button').forEach(el=>el.classList.remove('dark-mode')); darkModeToggle.textContent="🌙"; } }
+let darkMode=localStorage.getItem('darkMode')==='true';
+applyDarkMode(darkMode);
+darkModeToggle.addEventListener('click',()=>{ darkMode=!darkMode; localStorage.setItem('darkMode',darkMode); applyDarkMode(darkMode); });
+</script>
+</body>
+</html>

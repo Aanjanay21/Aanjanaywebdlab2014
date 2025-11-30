@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Categories - E-commerce</title>
+<style>
+body { font-family: Arial, sans-serif; background: #c8fdff; margin:0; padding:0; transition:0.3s; }
+header { background: #0059ff; color:white; padding:15px; text-align:center; font-size:28px; position:relative; }
+.cart { position:absolute; right:20px; top:15px; font-size:26px; color:white; }
+.cart-count { background:white; color:#0059ff; padding:2px 8px; border-radius:50%; font-size:14px; font-weight:bold; position:absolute; top:-10px; right:-12px; display:none; }
+.category-container { max-width:850px; margin:40px auto; }
+.category { background:white; padding:20px; margin:20px 0; border-radius:12px; display:flex; gap:25px; align-items:center; box-shadow:2px 2px 10px rgba(0,0,0,0.1); }
+.category img { width:160px; height:160px; border-radius:12px; object-fit:cover; }
+.category button { background:#01cca0; color:white; padding:10px 25px; border:none; border-radius:6px; cursor:pointer; }
+.category button:hover { background:#006650; }
+body.dark-mode { background-color:#121212; color:#e0e0e0; }
+header.dark-mode { background:#1a1a1a; color:#e0e0e0; }
+.Fashion.dark-mode, .product-container.dark-mode, .related-item.dark-mode { background-color:#1e1e1e; box-shadow:0 4px 10px rgba(255,255,255,0.05); color:#e0e0e0; }
+.category-btn.dark-mode, .explore-btn.dark-mode, #loadMoreBtn.dark-mode, .about-btn.dark-mode, .login-btn.dark-mode, .add-btn.dark-mode { background-color:#333; color:#fff; }
+.search-container input.dark-mode { background-color:#222; color:#fff; border-color:#555; }
+.search-container button.dark-mode { background-color:#01cca0; color:#fff; }
+</style>
+</head>
+<body>
+
+<header>
+    Categories
+    <button id="darkModeToggle" style="position:absolute; top:15px; right:60px; padding:8px 15px; border:none; border-radius:6px; cursor:pointer; background:#fff; color:#0059ff;">🌙</button>
+    <a href="cart.html" class="cart">🛒
+        <span id="cartCount" class="cart-count"></span>
+    </a>
+</header>
+
+<div class="category-container">
+
+    <div class="category">
+        <img src="Image/i1.jpg" alt="Tops">
+        <div>
+            <h2 style="color:#0059ff;">Tops</h2>
+            <p>Stylish tops for all seasons.</p>
+            <button onclick="location.href='product.html?item=Tops'">Explore</button>
+        </div>
+    </div>
+
+    <div class="category">
+        <img src="Image/i2.jpg" alt="Bottoms">
+        <div>
+            <h2 style="color:#0059ff;">Bottoms</h2>
+            <p>Comfortable pants, skirts, and shorts.</p>
+            <button onclick="location.href='product.html?item=Bottoms'">Explore</button>
+        </div>
+    </div>
+
+    <div class="category">
+        <img src="Image/i3.jpg" alt="Footwear">
+        <div>
+            <h2 style="color:#0059ff;">Footwear</h2>
+            <p>Trendy shoes to complete your look.</p>
+            <button onclick="location.href='product.html?item=Footwear'">Explore</button>
+        </div>
+    </div>
+
+    <div class="category">
+        <img src="Image/i4.jpg" alt="Accessories">
+        <div>
+            <h2 style="color:#0059ff;">Accessories</h2>
+            <p>Perfect accessories to complete your outfit.</p>
+            <button onclick="location.href='product.html?item=Accessories'">Explore</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function updateCartCount() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let c = cart.reduce((total, item) => total + item.quantity, 0);
+    const count = document.getElementById("cartCount");
+    count.textContent = c;
+    count.style.display = c > 0 ? 'inline-block' : 'none';
+}
+updateCartCount();
+</script>
+
+<script>
+const darkModeToggle = document.getElementById('darkModeToggle');
+const body = document.body;
+function applyDarkMode(isDark){
+    if(isDark){
+        body.classList.add('dark-mode');
+        document.querySelectorAll('header, .Fashion, .product-container, .related-item, .category-btn, .explore-btn, #loadMoreBtn, .about-btn, .login-btn, .add-btn, .search-container input, .search-container button').forEach(el => el.classList.add('dark-mode'));
+        darkModeToggle.textContent="☀️";
+    } else {
+        body.classList.remove('dark-mode');
+        document.querySelectorAll('header, .Fashion, .product-container, .related-item, .category-btn, .explore-btn, #loadMoreBtn, .about-btn, .login-btn, .add-btn, .search-container input, .search-container button').forEach(el => el.classList.remove('dark-mode'));
+        darkModeToggle.textContent="🌙";
+    }
+}
+let darkMode = localStorage.getItem('darkMode')==='true';
+applyDarkMode(darkMode);
+darkModeToggle.addEventListener('click', ()=>{
+    darkMode = !darkMode;
+    localStorage.setItem('darkMode', darkMode);
+    applyDarkMode(darkMode);
+});
+</script>
+
+</body>
+</html>

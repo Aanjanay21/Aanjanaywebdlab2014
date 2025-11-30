@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>About Us - E-commerce</title>
+<style>
+:root {
+  --primary: #0059ff;
+  --accent: #01cca0;
+  --bg: #c8fdff;
+  --text: #333;
+  --white: #fff;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); padding:1rem; display:flex; flex-direction:column; align-items:center; min-height:100vh; transition:0.3s; }
+header { background: var(--primary); color: var(--white); padding:1.2rem; text-align:center; font-size:2rem; width:100%; font-weight:bold; letter-spacing:0.05em; box-shadow:0 3px 8px rgba(0,0,0,0.2); font-family:"Courier New", monospace; position:relative; }
+main { width:100%; max-width:900px; background: var(--white); border-radius:12px; padding:2.5rem; margin-top:2rem; margin-bottom:3rem; box-shadow:0px 6px 20px rgba(0,0,0,0.15); }
+h1 { font-size:2rem; text-align:center; color: var(--primary); letter-spacing:0.1em; margin-bottom:1.5rem; text-transform:uppercase; }
+p { font-size:1.15rem; margin-bottom:1.2rem; color:#444; line-height:1.7; }
+.features { margin-top:2.5rem; display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1.5rem; }
+.feature-box { background: var(--bg); padding:1.2rem; border-radius:10px; border-left:6px solid var(--primary); box-shadow:0 3px 10px rgba(0,0,0,0.1); transition:0.3s ease; }
+.feature-box:hover { transform:translateY(-6px); background:#dffcff; border-left-color: var(--accent); }
+.feature-box h3 { margin-bottom:0.6rem; color: var(--primary); font-size:1.3rem; }
+.back-btn { display:block; width:200px; margin:2.5rem auto 0; padding:0.85rem; background: var(--primary); color: var(--white); text-align:center; border-radius:6px; text-decoration:none; font-size:1.2rem; font-weight:bold; transition:0.3s ease; }
+.back-btn:hover { background: var(--accent); box-shadow:0 0 0 3px rgba(0,40,114,0.4); }
+body.dark-mode { background-color:#121212; color:#e0e0e0; }
+header.dark-mode { background:#1a1a1a; color:#e0e0e0; }
+.Fashion.dark-mode, .product-container.dark-mode, .related-item.dark-mode { background-color:#1e1e1e; box-shadow:0 4px 10px rgba(255,255,255,0.05); color:#e0e0e0; }
+.category-btn.dark-mode, .explore-btn.dark-mode, #loadMoreBtn.dark-mode, .about-btn.dark-mode, .login-btn.dark-mode, .add-btn.dark-mode { background-color:#333; color:#fff; }
+.search-container input.dark-mode { background-color:#222; color:#fff; border-color:#555; }
+.search-container button.dark-mode { background-color:#01cca0; color:#fff; }
+@media (max-width:600px) { main { padding:1.5rem; } h1 { font-size:1.5rem; } p { font-size:1rem; } .back-btn { width:100%; font-size:1rem; } }
+</style>
+</head>
+<body>
+
+<header>About Us
+<button id="darkModeToggle" style="position:absolute; top:15px; right:60px; padding:8px 15px; border:none; border-radius:6px; cursor:pointer; background:#fff; color:#0059ff;">🌙</button>
+</header>
+
+<main>
+<h1>Welcome to E-commerce</h1>
+<p>At E-commerce, our goal is to bring the best and latest fashion trends directly to you. We provide high-quality clothing, footwear, and accessories to help you express your style with confidence.</p>
+<p>Since launching in 2025, we’ve grown into a brand that customers trust and love. We focus on providing premium items at affordable prices, fast delivery, and a smooth shopping experience every time.</p>
+<p>Thank you for choosing E-commerce — where style meets comfort and quality.</p>
+
+<section class="features">
+<div class="feature-box">
+<h3>✔ Premium Quality</h3>
+<p>We source top-notch materials and ensure each product meets quality standards.</p>
+</div>
+<div class="feature-box">
+<h3>✔ Fast Delivery</h3>
+<p>We deliver your orders quickly and safely no matter where you are.</p>
+</div>
+<div class="feature-box">
+<h3>✔ Best Prices</h3>
+<p>Get premium fashion at pocket-friendly prices with frequent discounts.</p>
+</div>
+<div class="feature-box">
+<h3>✔ 24/7 Support</h3>
+<p>Our customer support team is here to help you anytime you need us.</p>
+</div>
+</section>
+
+<a href="index.html" class="back-btn">Back to Home</a>
+</main>
+
+<script>
+const darkModeToggle = document.getElementById('darkModeToggle');
+const body = document.body;
+function applyDarkMode(isDark){
+    if(isDark){
+        body.classList.add('dark-mode');
+        document.querySelectorAll('header, .Fashion, .product-container, .related-item, .category-btn, .explore-btn, #loadMoreBtn, .about-btn, .login-btn, .add-btn, .search-container input, .search-container button').forEach(el=>el.classList.add('dark-mode'));
+        darkModeToggle.textContent="☀️";
+    } else {
+        body.classList.remove('dark-mode');
+        document.querySelectorAll('header, .Fashion, .product-container, .related-item, .category-btn, .explore-btn, #loadMoreBtn, .about-btn, .login-btn, .add-btn, .search-container input, .search-container button').forEach(el=>el.classList.remove('dark-mode'));
+        darkModeToggle.textContent="🌙";
+    }
+}
+let darkMode = localStorage.getItem('darkMode')==='true';
+applyDarkMode(darkMode);
+darkModeToggle.addEventListener('click', ()=>{
+    darkMode = !darkMode;
+    localStorage.setItem('darkMode', darkMode);
+    applyDarkMode(darkMode);
+});
+</script>
+
+</body>
+</html>
+
