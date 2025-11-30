@@ -28,5 +28,5 @@ Checkout Page – Shows order summary and simulates completing a purchase.
 
 ## 🚀 Deployment Link (Mandatory)
 Live Project Link:  
-not working
+https://aanjanay21.github.io/Aanjanaywebdlab2014/
 ---
